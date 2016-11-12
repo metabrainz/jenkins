@@ -1,15 +1,27 @@
-FROM jenkins:2.19.2
+FROM jenkins:alpine
 
 # Parent container switches to "jenkins" user, so we need to revert that.
 # Don't switch back because Docker will stop working.
 USER root
 
-# Install Docker and Compose
-RUN apt-get update && \
-	apt-get install -y apt-transport-https ca-certificates && \
-	apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D && \
-    echo "deb https://apt.dockerproject.org/repo debian-jessie main" > /etc/apt/sources.list.d/docker.list && \
-	apt-get update && \
-	apt-get install -y docker-engine python-pip && \
-	pip install docker-compose && \
-	rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache \
+            ca-certificates \
+            curl \
+            openssl \
+            py-pip \
+    && rm -rf /var/cache/apk/*
+
+# Installing Docker and Compose...
+# See https://hub.docker.com/_/docker/ for updates.
+ENV DOCKER_BUCKET get.docker.com
+ENV DOCKER_VERSION 1.12.3
+ENV DOCKER_SHA256 626601deb41d9706ac98da23f673af6c0d4631c4d194a677a9a1a07d7219fa0f
+RUN set -x \
+    && curl -fSL "https://${DOCKER_BUCKET}/builds/Linux/x86_64/docker-${DOCKER_VERSION}.tgz" -o docker.tgz \
+    && echo "${DOCKER_SHA256} *docker.tgz" | sha256sum -c - \
+    && tar -xzvf docker.tgz \
+    && mv docker/* /usr/local/bin/ \
+    && rmdir docker \
+    && rm docker.tgz \
+    && docker -v
+RUN pip install docker-compose
