@@ -7,6 +7,8 @@ USER root
 RUN apk add --no-cache \
             ca-certificates \
             curl \
+            m4 \
+            make \
             openssl \
             py-pip \
     && rm -rf /var/cache/apk/*
