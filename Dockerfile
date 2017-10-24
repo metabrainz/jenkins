@@ -1,4 +1,4 @@
-FROM jenkins:alpine
+FROM jenkins/jenkins:lts-alpine
 
 # Parent container switches to "jenkins" user, so we need to revert that.
 # Don't switch back because Docker will stop working.
