@@ -15,15 +15,26 @@ RUN apk add --no-cache \
 
 # Installing Docker and Compose...
 # See https://hub.docker.com/_/docker/ for updates.
-ENV DOCKER_BUCKET get.docker.com
-ENV DOCKER_VERSION 1.12.3
-ENV DOCKER_SHA256 626601deb41d9706ac98da23f673af6c0d4631c4d194a677a9a1a07d7219fa0f
-RUN set -x \
-    && curl -fSL "https://${DOCKER_BUCKET}/builds/Linux/x86_64/docker-${DOCKER_VERSION}.tgz" -o docker.tgz \
-    && echo "${DOCKER_SHA256} *docker.tgz" | sha256sum -c - \
-    && tar -xzvf docker.tgz \
-    && mv docker/* /usr/local/bin/ \
-    && rmdir docker \
-    && rm docker.tgz \
-    && docker -v
+# This install script copied from
+# https://github.com/docker-library/docker/blob/c2943e9a0803eea85526f63510a0a8c1e38630d5/18.06/Dockerfile
+
+ENV DOCKER_CHANNEL stable
+ENV DOCKER_VERSION 18.06.2-ce
+
+RUN set -eux; \
+	if ! wget -O docker.tgz "https://download.docker.com/linux/static/${DOCKER_CHANNEL}/x86_64/docker-${DOCKER_VERSION}.tgz"; then \
+		echo >&2 "error: failed to download 'docker-${DOCKER_VERSION}' from '${DOCKER_CHANNEL}' for '${dockerArch}'"; \
+		exit 1; \
+	fi; \
+	\
+	tar --extract \
+		--file docker.tgz \
+		--strip-components 1 \
+		--directory /usr/local/bin/ \
+	; \
+	rm docker.tgz; \
+	\
+	dockerd --version; \
+	docker --version
+
 RUN pip install docker-compose
