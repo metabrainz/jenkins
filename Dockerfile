@@ -7,23 +7,32 @@ USER root
 RUN apk add --no-cache \
             ca-certificates \
             curl \
+            gcc \
+            libffi-dev \
             m4 \
             make \
+            musl-dev \
             openssl \
-            py-pip \
+            openssl-dev \
+            py2-pip \
+            py3-pip \
+            python2 \
+            python2-dev \
+            python3 \
+            python3-dev \
     && rm -rf /var/cache/apk/*
 
 # Installing Docker and Compose...
 # See https://hub.docker.com/_/docker/ for updates.
-ENV DOCKER_BUCKET get.docker.com
-ENV DOCKER_VERSION 1.12.3
-ENV DOCKER_SHA256 626601deb41d9706ac98da23f673af6c0d4631c4d194a677a9a1a07d7219fa0f
+ENV DOCKER_BUCKET https://download.docker.com/linux/static/stable/x86_64
+ENV DOCKER_VERSION 19.03.5
+ENV DOCKER_SHA256 50cdf38749642ec43d6ac50f4a3f1f7f6ac688e8d8b4e1c5b7be06e1a82f06e9
 RUN set -x \
-    && curl -fSL "https://${DOCKER_BUCKET}/builds/Linux/x86_64/docker-${DOCKER_VERSION}.tgz" -o docker.tgz \
+    && curl -fSL "${DOCKER_BUCKET}/docker-${DOCKER_VERSION}.tgz" -o docker.tgz \
     && echo "${DOCKER_SHA256} *docker.tgz" | sha256sum -c - \
     && tar -xzvf docker.tgz \
     && mv docker/* /usr/local/bin/ \
     && rmdir docker \
     && rm docker.tgz \
     && docker -v
-RUN pip install docker-compose
+RUN pip3 install docker-compose
