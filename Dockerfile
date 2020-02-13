@@ -20,6 +20,7 @@ RUN apk add --no-cache \
             python2-dev \
             python3 \
             python3-dev \
+            yarn \
     && rm -rf /var/cache/apk/*
 
 # Installing Docker and Compose...
