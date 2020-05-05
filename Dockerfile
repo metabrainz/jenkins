@@ -36,4 +36,4 @@ RUN set -x \
     && rmdir docker \
     && rm docker.tgz \
     && docker -v
-RUN pip3 install docker-compose
+RUN pip3 --no-cache-dir install docker-compose
