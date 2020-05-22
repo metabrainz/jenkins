@@ -20,6 +20,7 @@ RUN apk add --no-cache \
             python2-dev \
             python3 \
             python3-dev \
+            rsync \
             yarn \
     && rm -rf /var/cache/apk/*
 
