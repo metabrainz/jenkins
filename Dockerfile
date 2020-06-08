@@ -38,3 +38,13 @@ RUN set -x \
     && rm docker.tgz \
     && docker -v
 RUN pip3 --no-cache-dir install docker-compose
+
+# Installing zopfli (for StaticBrainz jobs)
+RUN cd /tmp \
+    && git clone https://github.com/google/zopfli \
+    && cd zopfli \
+    && git checkout zopfli-1.0.3 \
+    && make zopfli \
+    && install -m 755 zopfli /usr/local/bin/ \
+    && cd - \
+    && rm -rf /tmp/zopfli
