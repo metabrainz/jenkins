@@ -14,7 +14,6 @@ RUN apk add --no-cache \
             musl-dev \
             openssl \
             openssl-dev \
-            py2-pip \
             py3-pip \
             python2 \
             python2-dev \
