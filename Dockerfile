@@ -8,6 +8,7 @@ RUN apk add --no-cache \
             ca-certificates \
             curl \
             gcc \
+            imagemagick \
             libffi-dev \
             m4 \
             make \
