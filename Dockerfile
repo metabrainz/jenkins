@@ -16,8 +16,6 @@ RUN apk add --no-cache \
             openssl \
             openssl-dev \
             py3-pip \
-            python2 \
-            python2-dev \
             python3 \
             python3-dev \
             rsync \
@@ -27,8 +25,8 @@ RUN apk add --no-cache \
 # Installing Docker and Compose...
 # See https://hub.docker.com/_/docker/ for updates.
 ENV DOCKER_BUCKET https://download.docker.com/linux/static/stable/x86_64
-ENV DOCKER_VERSION 19.03.13
-ENV DOCKER_SHA256 ddb13aff1fcdcceb710bf71a210169b9c1abfd7420eeaf42cf7975f8fae2fcc8
+ENV DOCKER_VERSION 24.0.8
+ENV DOCKER_SHA256 c016131f2b7e91bf1bd90a31741951ad710da34eef00936a6cc3ea086aeb29c6
 RUN set -x \
     && curl -fSL "${DOCKER_BUCKET}/docker-${DOCKER_VERSION}.tgz" -o docker.tgz \
     && echo "${DOCKER_SHA256} *docker.tgz" | sha256sum -c - \
@@ -37,7 +35,6 @@ RUN set -x \
     && rmdir docker \
     && rm docker.tgz \
     && docker -v
-RUN pip3 --no-cache-dir install docker-compose
 
 # Installing zopfli (for StaticBrainz jobs)
 RUN cd /tmp \
