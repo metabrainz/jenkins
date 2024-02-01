@@ -7,6 +7,8 @@ USER root
 RUN apk add --no-cache \
             ca-certificates \
             curl \
+            docker \
+            docker-cli-compose \
             gcc \
             imagemagick \
             libffi-dev \
@@ -21,20 +23,6 @@ RUN apk add --no-cache \
             rsync \
             yarn \
     && rm -rf /var/cache/apk/*
-
-# Installing Docker and Compose...
-# See https://hub.docker.com/_/docker/ for updates.
-ENV DOCKER_BUCKET https://download.docker.com/linux/static/stable/x86_64
-ENV DOCKER_VERSION 24.0.8
-ENV DOCKER_SHA256 c016131f2b7e91bf1bd90a31741951ad710da34eef00936a6cc3ea086aeb29c6
-RUN set -x \
-    && curl -fSL "${DOCKER_BUCKET}/docker-${DOCKER_VERSION}.tgz" -o docker.tgz \
-    && echo "${DOCKER_SHA256} *docker.tgz" | sha256sum -c - \
-    && tar -xzvf docker.tgz \
-    && mv docker/* /usr/local/bin/ \
-    && rmdir docker \
-    && rm docker.tgz \
-    && docker -v
 
 # Installing zopfli (for StaticBrainz jobs)
 RUN cd /tmp \
