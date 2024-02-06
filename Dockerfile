@@ -11,6 +11,7 @@ RUN apk add --no-cache \
             docker-cli-compose \
             gcc \
             imagemagick \
+            jpeg \
             libffi-dev \
             m4 \
             make \
